@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Médico | Gestión de Pacientes</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header / Navbar Principal -->
+    <header class="navbar navbar-expand-lg navbar-clinica sticky-top">
+        <div class="container-fluid px-lg-4">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="#" onclick="cambiarPestana('directorio'); return false;">
+                <div class="brand-icon-wrapper">
+                    <i class="bi bi-heart-pulse-fill"></i>
+                </div>
+                <div>
+                    <span class="brand-title">Panel Médico</span>
+                    <span class="brand-subtitle d-block">Gestión Clínica Integral</span>
+                </div>
+            </a>
+
+            <!-- Navegación por pestañas -->
+            <nav class="nav nav-pills custom-pills ms-auto me-3" id="mainNavTabs" role="tablist">
+                <button class="nav-link active" id="tab-directorio" onclick="cambiarPestana('directorio')" type="button">
+                    <i class="bi bi-people-fill me-2"></i>Directorio de Pacientes
+                    <span class="badge bg-white text-teal ms-2" id="badgeTotalPacientes">0</span>
+                </button>
+                <button class="nav-link" id="tab-ficha" onclick="cambiarPestana('ficha')" type="button">
+                    <i class="bi bi-file-earmark-medical-fill me-2"></i>Búsqueda & Ficha Médica
+                </button>
+            </nav>
+
+            <button class="btn btn-action-primary shadow-sm" onclick="abrirModalNuevo()">
+                <i class="bi bi-person-plus-fill me-1"></i>Nuevo Paciente
+            </button>
+        </div>
+    </header>
+
+    <main class="container-fluid px-lg-4 py-4 main-content">
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 1: DIRECTORIO DE PACIENTES (CRUD)  -->
+        <!-- ========================================== -->
+        <section id="vistaDirectorio" class="vista-seccion">
+            <!-- Barra superior de gestión y búsqueda -->
+            <div class="card card-custom shadow-sm mb-4 border-0">
+                <div class="card-body p-4">
+                    <div class="row g-3 align-items-center justify-content-between">
+                        <div class="col-md-6 col-lg-5">
+                            <h4 class="fw-bold mb-1 text-slate-800">Directorio de Pacientes</h4>
+                            <p class="text-muted small mb-0">Consulte, agregue, edite o elimine registros de pacientes de la clínica.</p>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <div class="input-group search-input-group">
+                                <span class="input-group-text bg-transparent border-end-0 text-muted">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="filtroTabla" class="form-control border-start-0 ps-0" placeholder="Buscar por Nombre, Apellido, DNI u Obra Social...">
+                                <button class="btn btn-outline-secondary border-start-0" type="button" id="btnLimpiarFiltro" title="Limpiar filtro">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabla de Pacientes -->
+            <div class="card card-custom shadow-sm border-0">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 custom-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="ps-4">Paciente</th>
+                                    <th scope="col">DNI</th>
+                                    <th scope="col">Teléfono</th>
+                                    <th scope="col">Obra Social / N° Afiliado</th>
+                                    <th scope="col">Alergias Conocidas</th>
+                                    <th scope="col" class="text-end pe-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaPacientesBody">
+                                <!-- Filas generadas dinámicamente con JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Estado: Cargando tabla -->
+                    <div id="cargandoTabla" class="text-center py-5">
+                        <div class="spinner-border text-teal" role="status"></div>
+                        <p class="mt-2 text-muted small">Cargando pacientes...</p>
+                    </div>
+
+                    <!-- Estado: Sin resultados -->
+                    <div id="sinPacientes" class="text-center py-5 d-none">
+                        <div class="empty-icon-wrapper mb-3">
+                            <i class="bi bi-person-x"></i>
+                        </div>
+                        <h5 class="fw-bold text-slate-700">No se encontraron pacientes</h5>
+                        <p class="text-muted small mb-3">No hay pacientes que coincidan con la búsqueda o el directorio está vacío.</p>
+                        <button class="btn btn-sm btn-outline-teal" onclick="abrirModalNuevo()">
+                            <i class="bi bi-plus-circle me-1"></i>Registrar primer paciente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SECCIÓN 2: BÚSQUEDA Y FICHA MÉDICA         -->
+        <!-- ========================================== -->
+        <section id="vistaFicha" class="vista-seccion d-none">
+            <!-- Formulario de búsqueda por DNI -->
+            <div class="card card-custom shadow-sm mb-4 border-0">
+                <div class="card-body p-4">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 text-center">
+                            <h4 class="fw-bold text-slate-800 mb-2">Consulta de Historia Clínica</h4>
+                            <p class="text-muted small mb-4">Ingrese el número de DNI del paciente para consultar su reporte médico detallado.</p>
+
+                            <form id="formBusquedaDni" class="row g-2 justify-content-center align-items-center">
+                                <div class="col-sm-7 col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light text-muted"><i class="bi bi-card-heading"></i></span>
+                                        <input type="text" inputmode="numeric" class="form-control form-control-lg fs-6" id="txtDni" placeholder="Ej: 40123456" maxlength="8" pattern="\d{7,8}" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm-auto">
+                                    <button type="submit" class="btn btn-action-primary btn-lg fs-6 px-4">
+                                        <i class="bi bi-search me-1"></i>Consultar Ficha
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Accesos rápidos a pacientes de ejemplo -->
+                            <div class="mt-3 d-flex flex-wrap align-items-center justify-content-center gap-2" id="quickDniPills">
+                                <span class="text-muted small">Sugerencias rápidas:</span>
+                                <!-- Generadas dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Estado: cargando ficha -->
+            <div id="cargandoFicha" class="text-center my-5 d-none">
+                <div class="spinner-border text-teal" role="status"></div>
+                <p class="mt-2 text-muted">Consultando historia clínica del paciente...</p>
+            </div>
+
+            <!-- Alerta de Error en búsqueda -->
+            <div id="alertaErrorFicha" class="alert alert-danger custom-alert d-none mx-auto max-w-700" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill fs-4 me-3 text-danger"></i>
+                    <div>
+                        <strong class="d-block">Aviso de consulta</strong>
+                        <span id="mensajeErrorFicha">No se encontró ningún paciente con el DNI ingresado.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ficha Detallada del Paciente -->
+            <div id="resultadoFicha" class="card card-custom shadow-sm border-0 d-none">
+                <!-- Header de la Ficha Médica -->
+                <div class="card-header bg-white p-4 border-bottom d-flex flex-wrap align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="avatar-circle-lg" id="avatarFicha">JS</div>
+                        <div>
+                            <div class="d-flex align-items-center gap-2">
+                                <h3 class="fw-bold mb-0 text-slate-800" id="valNombreCompleto">Joaquin Saharrea</h3>
+                                <span class="badge badge-reporte" id="badgeIdReporte">REP-00001</span>
+                            </div>
+                            <span class="text-muted small"><i class="bi bi-person-vcard me-1"></i>DNI: <strong id="valDniFicha">-</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Acciones directas sobre la ficha -->
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-secondary btn-sm" onclick="window.print()" title="Imprimir o exportar ficha">
+                            <i class="bi bi-printer me-1"></i>Imprimir
+                        </button>
+                        <button class="btn btn-outline-teal btn-sm" id="btnEditarDesdeFicha" title="Editar este paciente">
+                            <i class="bi bi-pencil me-1"></i>Editar Datos
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm" id="btnEliminarDesdeFicha" title="Eliminar este paciente">
+                            <i class="bi bi-trash3 me-1"></i>Eliminar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-body p-4">
+                    <!-- Fila de Datos Personales y Cobertura -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6 col-md-3">
+                            <div class="info-box p-3 rounded-3 bg-light">
+                                <span class="text-muted small d-block">Nombre</span>
+                                <span class="fw-bold text-slate-800" id="valNombre">-</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="info-box p-3 rounded-3 bg-light">
+                                <span class="text-muted small d-block">Apellido</span>
+                                <span class="fw-bold text-slate-800" id="valApellido">-</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="info-box p-3 rounded-3 bg-light">
+                                <span class="text-muted small d-block">Obra Social</span>
+                                <span class="fw-bold text-teal" id="valObraSocial">-</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="info-box p-3 rounded-3 bg-light">
+                                <span class="text-muted small d-block">N° de Afiliado</span>
+                                <span class="fw-bold text-slate-800" id="valNumeroAfiliado">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alerta de Alergias -->
+                    <div class="alergias-banner p-3 rounded-3 mb-4 d-flex align-items-center gap-3">
+                        <div class="alergias-icon">
+                            <i class="bi bi-shield-exclamation fs-3"></i>
+                        </div>
+                        <div>
+                            <span class="d-block fw-bold text-uppercase small letter-spacing-1">Alergias Conocidas / Factores de Riesgo</span>
+                            <span class="fw-semibold" id="valAlergias">Sin alergias registradas</span>
+                        </div>
+                    </div>
+
+                    <!-- Tres Paneles Médicos -->
+                    <div class="row g-4">
+                        <div class="col-lg-4">
+                            <div class="card h-100 border medical-subcard">
+                                <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                                    <i class="bi bi-capsule text-primary fs-5"></i>
+                                    <span class="fw-bold text-slate-800">Medicamentos Recetados</span>
+                                </div>
+                                <div class="card-body p-3">
+                                    <ul id="listaMedicamentos" class="list-group list-group-flush custom-list"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card h-100 border medical-subcard">
+                                <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                                    <i class="bi bi-clipboard2-pulse text-teal fs-5"></i>
+                                    <span class="fw-bold text-slate-800">Estudios / Tratamientos</span>
+                                </div>
+                                <div class="card-body p-3">
+                                    <ul id="listaEstudios" class="list-group list-group-flush custom-list"></ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card h-100 border medical-subcard">
+                                <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                                    <i class="bi bi-person-lines-fill text-indigo fs-5"></i>
+                                    <span class="fw-bold text-slate-800">Médicos Visitados</span>
+                                </div>
+                                <div class="card-body p-3">
+                                    <ul id="listaMedicos" class="list-group list-group-flush custom-list"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================== -->
+    <!-- MODAL: CREAR / EDITAR PACIENTE             -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalPaciente" tabindex="-1" aria-labelledby="modalPacienteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg modal-custom">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <div>
+                        <h5 class="modal-title fw-bold text-slate-800" id="modalPacienteLabel">Nuevo Paciente</h5>
+                        <p class="text-muted small mb-0" id="modalPacienteSubtitulo">Complete los datos personales y de cobertura médica.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body pt-3 pb-4 px-4">
+                    <!-- Banner de error dentro del modal -->
+                    <div id="modalErrorBanner" class="alert alert-danger custom-alert d-none mb-3 py-2 px-3 small" role="alert">
+                        <i class="bi bi-exclamation-circle-fill me-2"></i><span id="modalErrorTexto"></span>
+                    </div>
+
+                    <form id="formPaciente" novalidate>
+                        <input type="hidden" id="pacienteId">
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="inputNombre" class="form-label fw-semibold text-slate-700">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="inputNombre" placeholder="Ej: Joaquin" required maxlength="100">
+                                <div class="invalid-feedback">Ingrese el nombre del paciente.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputApellido" class="form-label fw-semibold text-slate-700">Apellido <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="inputApellido" placeholder="Ej: Saharrea" required maxlength="100">
+                                <div class="invalid-feedback">Ingrese el apellido del paciente.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputDni" class="form-label fw-semibold text-slate-700">DNI (7 u 8 dígitos) <span class="text-danger">*</span></label>
+                                <input type="text" inputmode="numeric" class="form-control" id="inputDni" placeholder="Ej: 40123456" maxlength="8" required>
+                                <div class="invalid-feedback">El DNI debe tener entre 7 y 8 números.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputTelefono" class="form-label fw-semibold text-slate-700">Teléfono de contacto</label>
+                                <input type="text" inputmode="numeric" class="form-control" id="inputTelefono" placeholder="Ej: 2610000002" maxlength="15">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputObraSocial" class="form-label fw-semibold text-slate-700">Obra Social / Prepaga</label>
+                                <input type="text" class="form-control" id="inputObraSocial" placeholder="Ej: OSEP, OSDE, Swiss Medical" maxlength="100">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="inputNumeroAfiliado" class="form-label fw-semibold text-slate-700">N° de Afiliado</label>
+                                <input type="text" inputmode="numeric" class="form-control" id="inputNumeroAfiliado" placeholder="Ej: 987654" maxlength="15">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="inputAlergias" class="form-label fw-semibold text-slate-700">Alergias Conocidas / Advertencias Clínicas</label>
+                                <textarea class="form-control" id="inputAlergias" rows="2" placeholder="Ej: Penicilina, polen, rinitis alérgica... (dejar vacío si no tiene)" maxlength="255"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-action-primary px-4" id="btnGuardarPaciente">
+                                <span class="spinner-border spinner-border-sm d-none me-2" id="spinnerGuardar" role="status"></span>
+                                <span id="btnGuardarTexto">Guardar Paciente</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL: CONFIRMAR ELIMINACIÓN               -->
+    <!-- ========================================== -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg modal-custom">
+                <div class="modal-body text-center p-4">
+                    <div class="delete-icon-wrapper mx-auto mb-3">
+                        <i class="bi bi-trash3-fill"></i>
+                    </div>
+                    <h5 class="fw-bold text-slate-800 mb-2">¿Eliminar Paciente?</h5>
+                    <p class="text-muted small mb-3">
+                        Está a punto de eliminar a <strong id="deleteNombrePaciente">este paciente</strong> (DNI: <strong id="deleteDniPaciente">-</strong>).
+                    </p>
+                    <div class="alert alert-warning py-2 px-3 small mb-4 text-start">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        Esta acción eliminará de forma permanente al paciente y su <strong>historia clínica asociada</strong>.
+                    </div>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger px-4" id="btnConfirmarEliminar">
+                            <span class="spinner-border spinner-border-sm d-none me-2" id="spinnerEliminar" role="status"></span>
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TOAST NOTIFICATIONS (Alertas flotantes)    -->
+    <!-- ========================================== -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+        <div id="toastFeedback" class="toast align-items-center border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center gap-2" id="toastMensaje">
+                    <i class="bi bi-check-circle-fill text-success fs-5"></i>
+                    <span>Operación realizada con éxito.</span>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts: Bootstrap 5 Bundle + App JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

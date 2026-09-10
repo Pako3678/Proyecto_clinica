@@ -1,0 +1,352 @@
+:root {
+    --teal-primary: #0d6e6e;
+    --teal-hover: #085353;
+    --teal-light: #eef8f6;
+    --teal-border: #a4dbcf;
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-600: #475569;
+    --slate-500: #64748b;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: #f3f6f8;
+    color: var(--slate-800);
+    min-height: 100vh;
+}
+
+/* ========================================= */
+/* NAVBAR & HEADER                           */
+/* ========================================= */
+.navbar-clinica {
+    background: linear-gradient(135deg, #094f4f 0%, #0d6e6e 100%);
+    box-shadow: 0 4px 20px rgba(13, 110, 110, 0.15);
+    padding: 0.75rem 1rem;
+}
+
+.brand-icon-wrapper {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.4rem;
+    backdrop-filter: blur(4px);
+    transition: transform 0.25s ease;
+}
+
+.navbar-brand:hover .brand-icon-wrapper {
+    transform: scale(1.06);
+}
+
+.brand-title {
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+}
+
+.brand-subtitle {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Pestañas de navegación */
+.custom-pills .nav-link {
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
+    font-size: 0.88rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.custom-pills .nav-link:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.custom-pills .nav-link.active {
+    background: #ffffff;
+    color: var(--teal-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.text-teal {
+    color: var(--teal-primary) !important;
+}
+
+/* Botón de acción primario */
+.btn-action-primary {
+    background-color: #ffffff;
+    color: var(--teal-primary);
+    font-weight: 700;
+    font-size: 0.88rem;
+    border-radius: 10px;
+    padding: 0.5rem 1.15rem;
+    border: none;
+    transition: all 0.25s ease;
+}
+
+.btn-action-primary:hover {
+    background-color: #f1f8f7;
+    color: var(--teal-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.btn-action-primary:active {
+    transform: translateY(0);
+}
+
+/* ========================================= */
+/* TARJETAS & CONTENEDORES                   */
+/* ========================================= */
+.card-custom {
+    border-radius: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05) !important;
+}
+
+.search-input-group .form-control {
+    font-size: 0.92rem;
+    border-color: #e2e8f0;
+    padding: 0.65rem 0.85rem;
+}
+
+.search-input-group .form-control:focus {
+    border-color: var(--teal-border);
+    box-shadow: 0 0 0 3px rgba(13, 110, 110, 0.12);
+}
+
+.search-input-group .input-group-text {
+    border-color: #e2e8f0;
+}
+
+/* ========================================= */
+/* TABLA DE PACIENTES                        */
+/* ========================================= */
+.custom-table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.custom-table thead th {
+    background-color: #f8fafc;
+    color: var(--slate-600);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.custom-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.custom-table tbody td {
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #edf2f7;
+    font-size: 0.9rem;
+}
+
+/* Avatares */
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0d6e6e, #14b8a6);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(13, 110, 110, 0.2);
+}
+
+.avatar-circle-lg {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #0d6e6e, #14b8a6);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(13, 110, 110, 0.25);
+}
+
+/* Badges */
+.badge-os {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    font-weight: 600;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+}
+
+.badge-alergia-si {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    font-weight: 600;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+}
+
+.badge-alergia-no {
+    background-color: #f1f5f9;
+    color: var(--slate-600);
+    font-weight: 500;
+    font-size: 0.78rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+}
+
+.badge-reporte {
+    background: linear-gradient(135deg, #334155, #1e293b);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    letter-spacing: 0.5px;
+}
+
+/* Botones de acción en tabla */
+.btn-action-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.btn-action-icon:hover {
+    transform: scale(1.08);
+}
+
+/* ========================================= */
+/* FICHA DEL PACIENTE                        */
+/* ========================================= */
+.alergias-banner {
+    background: #fef2f2;
+    border-left: 5px solid #ef4444;
+    color: #991b1b;
+}
+
+.alergias-icon {
+    color: #ef4444;
+}
+
+.letter-spacing-1 {
+    letter-spacing: 0.8px;
+}
+
+.medical-subcard {
+    border-radius: 14px;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.custom-list .list-group-item {
+    padding: 0.7rem 0.8rem;
+    border-color: #f1f5f9;
+    font-size: 0.88rem;
+    color: var(--slate-700);
+}
+
+.btn-outline-teal {
+    color: var(--teal-primary);
+    border-color: var(--teal-border);
+    font-weight: 600;
+}
+
+.btn-outline-teal:hover {
+    background-color: var(--teal-primary);
+    border-color: var(--teal-primary);
+    color: #ffffff;
+}
+
+/* Botones rápidos de DNI */
+.quick-dni-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: var(--slate-700);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-dni-btn:hover {
+    background: var(--teal-light);
+    border-color: var(--teal-border);
+    color: var(--teal-primary);
+}
+
+/* ========================================= */
+/* MODALES                                   */
+/* ========================================= */
+.modal-custom {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.delete-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.empty-icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: #f1f5f9;
+    color: var(--slate-500);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.max-w-700 {
+    max-width: 700px;
+}
