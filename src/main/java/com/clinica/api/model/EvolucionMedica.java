@@ -31,7 +31,6 @@ public class EvolucionMedica {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Se guarda cuándo se hizo la atención
     private LocalDateTime fecha;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -47,7 +46,6 @@ public class EvolucionMedica {
     @JsonIgnore
     private HistoriaClinica historiaClinica;
 
-    // Listas opcionales de lo que se le recetó en ESA consulta
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "evolucion_tratamientos",

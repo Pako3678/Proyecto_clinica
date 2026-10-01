@@ -9,11 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Clase base abstracta, equivalente a la Persona.java original.
- * Se mapea como @MappedSuperclass para que Medico y Paciente
- * tengan sus propias tablas con estas columnas heredadas.
- */
 @MappedSuperclass
 @Getter
 @Setter

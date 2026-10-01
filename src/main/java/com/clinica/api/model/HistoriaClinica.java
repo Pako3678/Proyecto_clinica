@@ -34,7 +34,6 @@ public class HistoriaClinica {
     @JsonIgnore
     private Paciente paciente;
 
-    // Una historia clínica tiene MUCHAS evoluciones a lo largo del tiempo
     @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EvolucionMedica> evoluciones = new ArrayList<>();
 

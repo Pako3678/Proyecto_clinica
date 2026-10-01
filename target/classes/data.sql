@@ -1,7 +1,3 @@
--- Datos de ejemplo. Se ejecutan en cada arranque (spring.sql.init.mode=always).
--- Recomendación: una vez cargados, cambiar esa propiedad a "never" para no reintentar
--- inserts en cada reinicio (medicos/pacientes usan INSERT IGNORE por el DNI único,
--- pero medicamentos/tratamientos no tienen constraint único y podrían duplicarse).
 
 INSERT IGNORE INTO medicos (id, nombre, apellido, dni, telefono, matricula, especialidad)
 VALUES (1, 'Laura', 'Gimenez', 30111222, 2610000001, 45678, 'Cardiologia');

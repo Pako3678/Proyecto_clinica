@@ -1,8 +1,8 @@
 # Panel Médico — API REST + MySQL + Frontend Bootstrap
 
-Migración del proyecto Java Swing original (`PanelMedico.java`) a una arquitectura web moderna con gestión integral de pacientes (CRUD):
+Sistema de gestión clínica y administración integral de pacientes (CRUD):
 
-- **Backend headless**: Spring Boot 3 + Spring Data JPA (`/src/main/java`)
+- **Backend**: Spring Boot 3 + Spring Data JPA (`/src/main/java`)
 - **Base de datos**: MySQL (persistencia del modelo `Persona/Medico/Paciente/HistoriaClinica/EvolucionMedica/...`)
 - **Frontend**: HTML5 + JS + CSS con Bootstrap 5, diseño médico moderno ('Plus Jakarta Sans') y consumo de API vía `fetch`.
 
@@ -23,10 +23,8 @@ Al arrancar, Hibernate crea/actualiza las tablas automáticamente (`ddl-auto=upd
 Requiere JDK 17+ y Maven (o ejecutar directamente con `run.bat` en Windows).
 
 ```bash
-# Opción 1: Ejecutar script automático (compila y levanta la app)
-run.bat
 
-# Opción 2: Con Maven
+
 mvn spring-boot:run
 ```
 

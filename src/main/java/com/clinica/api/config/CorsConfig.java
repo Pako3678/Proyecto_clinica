@@ -6,11 +6,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-/**
- * Backend headless: habilita CORS para que el frontend estático
- * (servido desde otro origen/puerto, ej. Live Server o file://)
- * pueda consumir la API sin bloqueos del navegador.
- */
 @Configuration
 public class CorsConfig {
 

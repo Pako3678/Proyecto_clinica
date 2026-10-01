@@ -19,11 +19,6 @@ public class Paciente extends Persona {
 
     private Integer numeroAfiliado;
 
-    /**
-     * Campo agregado respecto del modelo Swing original: el panel mostraba
-     * "Alergias Conocidas" pero la clase Paciente.java no tenía ese dato.
-     * Se incorpora acá para que la búsqueda tenga contenido real.
-     */
     private String alergias;
 
     @OneToOne(mappedBy = "paciente", cascade = CascadeType.ALL, orphanRemoval = true)

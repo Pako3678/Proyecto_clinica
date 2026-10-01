@@ -22,9 +22,9 @@ public class Medicamento {
 
     private String nombreComercial;
 
-    private String drogaFarma; // Ej: Amoxicilina
+    private String drogaFarma;
 
-    private String presentacion; // Ej: Comprimidos 500mg
+    private String presentacion;
 
     public Long getId() {
         return id;

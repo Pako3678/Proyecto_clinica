@@ -1,13 +1,9 @@
-// ===============================================================
-// CONFIGURACIÓN DE LA API Y ESTADO GLOBAL
-// ===============================================================
 const API_BASE_URL = "http://localhost:8080/api";
 
 let pacientesLista = [];
 let pacienteEliminarId = null;
-let pacienteActualFicha = null; // Guarda el DNI o ID del paciente abierto en ficha
+let pacienteActualFicha = null;
 
-// Referencias a elementos DOM
 const vistaDirectorio = document.getElementById("vistaDirectorio");
 const vistaFicha = document.getElementById("vistaFicha");
 const tabDirectorio = document.getElementById("tab-directorio");
@@ -31,7 +27,6 @@ const quickDniPills = document.getElementById("quickDniPills");
 const btnEditarDesdeFicha = document.getElementById("btnEditarDesdeFicha");
 const btnEliminarDesdeFicha = document.getElementById("btnEliminarDesdeFicha");
 
-// Modal Paciente
 const modalPacienteEl = document.getElementById("modalPaciente");
 const formPaciente = document.getElementById("formPaciente");
 const modalPacienteLabel = document.getElementById("modalPacienteLabel");
@@ -51,31 +46,24 @@ const inputObraSocial = document.getElementById("inputObraSocial");
 const inputNumeroAfiliado = document.getElementById("inputNumeroAfiliado");
 const inputAlergias = document.getElementById("inputAlergias");
 
-// Modal Eliminar
 const modalEliminarEl = document.getElementById("modalEliminar");
 const deleteNombrePaciente = document.getElementById("deleteNombrePaciente");
 const deleteDniPaciente = document.getElementById("deleteDniPaciente");
 const btnConfirmarEliminar = document.getElementById("btnConfirmarEliminar");
 const spinnerEliminar = document.getElementById("spinnerEliminar");
 
-// Toast
 const toastFeedbackEl = document.getElementById("toastFeedback");
 const toastMensaje = document.getElementById("toastMensaje");
 
-// Instancias de modales y toast Bootstrap
 let modalPaciente = null;
 let modalEliminar = null;
 let toastFeedback = null;
 
-// ===============================================================
-// INICIALIZACIÓN
-// ===============================================================
 document.addEventListener("DOMContentLoaded", () => {
     modalPaciente = new bootstrap.Modal(modalPacienteEl);
     modalEliminar = new bootstrap.Modal(modalEliminarEl);
     toastFeedback = new bootstrap.Toast(toastFeedbackEl, { delay: 3500 });
 
-    // Restricciones de entrada numéricas
     txtDni.addEventListener("input", () => {
         txtDni.value = txtDni.value.replace(/\D/g, "").slice(0, 8);
     });
@@ -92,7 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
         inputNumeroAfiliado.value = inputNumeroAfiliado.value.replace(/\D/g, "").slice(0, 15);
     });
 
-    // Filtro interactivo de la tabla
     filtroTabla.addEventListener("input", () => {
         const query = filtroTabla.value.trim().toLowerCase();
         filtrarTablaLocal(query);
@@ -103,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
         renderizarTabla(pacientesLista);
     });
 
-    // Envío del formulario de búsqueda de ficha por DNI
     formBusquedaDni.addEventListener("submit", (e) => {
         e.preventDefault();
         const dni = txtDni.value.trim();
@@ -112,19 +98,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Envío del formulario de alta / edición
     formPaciente.addEventListener("submit", guardarPaciente);
 
-    // Botón confirmar eliminación
     btnConfirmarEliminar.addEventListener("click", ejecutarEliminacion);
 
-    // Carga inicial de pacientes
     cargarPacientes();
 });
 
-// ===============================================================
-// CAMBIO DE PESTAÑAS (NAVEGACIÓN)
-// ===============================================================
 function cambiarPestana(pestana) {
     if (pestana === "directorio") {
         tabDirectorio.classList.add("active");
@@ -139,9 +119,6 @@ function cambiarPestana(pestana) {
     }
 }
 
-// ===============================================================
-// GESTIÓN DEL DIRECTORIO DE PACIENTES (CRUD)
-// ===============================================================
 async function cargarPacientes() {
     cargandoTabla.classList.remove("d-none");
     sinPacientes.classList.add("d-none");
@@ -196,19 +173,15 @@ function renderizarTabla(pacientes) {
     pacientes.forEach(p => {
         const tr = document.createElement("tr");
 
-        // Iniciales para el avatar
         const iniciales = `${(p.nombre || "").charAt(0)}${(p.apellido || "").charAt(0)}`.toUpperCase() || "PA";
 
-        // Badge de alergias
         let alergiasBadge = `<span class="badge badge-alergia-no"><i class="bi bi-check2 me-1"></i>Sin registrar</span>`;
         if (p.alergias && p.alergias.trim() !== "" && !p.alergias.toLowerCase().includes("sin alergias")) {
             alergiasBadge = `<span class="badge badge-alergia-si" title="${p.alergias}"><i class="bi bi-exclamation-circle-fill me-1"></i>${p.alergias}</span>`;
         }
 
-        // Formato de teléfono
         const telStr = p.telefono ? `<i class="bi bi-telephone me-1 text-muted"></i>${p.telefono}` : `<span class="text-muted fst-italic">No registrado</span>`;
 
-        // Obra social
         const osStr = p.obraSocial ? `<span class="badge badge-os">${p.obraSocial}</span> ${p.numeroAfiliado ? `<small class="text-muted d-block">Af: ${p.numeroAfiliado}</small>` : ''}` : `<span class="text-muted fst-italic">Particular</span>`;
 
         tr.innerHTML = `
@@ -262,9 +235,6 @@ function generarPildorasRapidas(pacientes) {
     });
 }
 
-// ===============================================================
-// MODAL: ALTA Y EDICIÓN DE PACIENTE
-// ===============================================================
 function abrirModalNuevo() {
     formPaciente.reset();
     formPaciente.classList.remove("was-validated");
@@ -336,7 +306,6 @@ async function guardarPaciente(event) {
         alergias: inputAlergias.value.trim() || null
     };
 
-    // Validar DNI
     if (isNaN(payload.dni) || payload.dni < 1000000 || payload.dni > 99999999) {
         mostrarErrorModal("El DNI debe tener entre 7 y 8 números válidos.");
         return;
@@ -365,14 +334,11 @@ async function guardarPaciente(event) {
             return;
         }
 
-        // Operación exitosa
         modalPaciente.hide();
         mostrarToast(esEdicion ? "Paciente actualizado exitosamente." : "Paciente registrado exitosamente.", "success");
 
-        // Recargar lista
         await cargarPacientes();
 
-        // Si se estaba visualizando en la ficha, actualizarla también
         if (pacienteActualFicha && String(pacienteActualFicha) === String(payload.dni)) {
             consultarFichaPorDni(payload.dni);
         }
@@ -403,9 +369,6 @@ function ocultarErrorModal() {
     modalErrorBanner.classList.add("d-none");
 }
 
-// ===============================================================
-// MODAL: ELIMINAR PACIENTE
-// ===============================================================
 function abrirModalEliminar(id, nombreCompleto, dni) {
     pacienteEliminarId = id;
     deleteNombrePaciente.textContent = nombreCompleto;
@@ -431,7 +394,6 @@ async function ejecutarEliminacion() {
         modalEliminar.hide();
         mostrarToast("Paciente e historia clínica eliminados correctamente.", "success");
 
-        // Si el paciente eliminado estaba en la ficha actual, ocultar ficha
         const pacienteEliminado = pacientesLista.find(p => p.id === pacienteEliminarId);
         if (pacienteEliminado && pacienteActualFicha === pacienteEliminado.dni) {
             resultadoFicha.classList.add("d-none");
@@ -450,9 +412,6 @@ async function ejecutarEliminacion() {
     }
 }
 
-// ===============================================================
-// CONSULTA DE FICHA MÉDICA
-// ===============================================================
 function irAFicha(dni) {
     cambiarPestana("ficha");
     txtDni.value = dni;
@@ -501,7 +460,6 @@ function mostrarResultadoFicha(p) {
     document.getElementById("valNumeroAfiliado").textContent = p.numeroAfiliado ?? "N/A";
     document.getElementById("valAlergias").textContent = p.alergias || "Sin alergias registradas";
 
-    // Botones de acción directa desde la ficha
     const pacienteEnLista = pacientesLista.find(item => item.dni === p.dni);
     if (pacienteEnLista) {
         btnEditarDesdeFicha.onclick = () => abrirModalEditar(pacienteEnLista.id);
@@ -551,9 +509,6 @@ function ocultarMensajesFicha() {
     resultadoFicha.classList.add("d-none");
 }
 
-// ===============================================================
-// NOTIFICACIONES TOAST FLOTANTES
-// ===============================================================
 function mostrarToast(mensaje, tipo = "success") {
     const icono = tipo === "success" 
         ? '<i class="bi bi-check-circle-fill text-success fs-5"></i>' 

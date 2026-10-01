@@ -115,7 +115,6 @@ public class PacienteService {
         paciente.setNumeroAfiliado(dto.getNumeroAfiliado());
         paciente.setAlergias(dto.getAlergias() != null ? dto.getAlergias().trim() : null);
 
-        // Se crea automáticamente una HistoriaClinica inicial vinculada
         HistoriaClinica historia = new HistoriaClinica();
         paciente.setHistoriaClinica(historia);
 
@@ -151,10 +150,7 @@ public class PacienteService {
         Paciente paciente = pacienteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("No se encontró el paciente con ID " + id));
 
-        // Limpieza de turnos asociados si los hubiera para no violar restricciones de FK
         turnoRepository.deleteByPacienteId(id);
-
-        // Al eliminar el paciente, cascade = ALL en historiaClinica elimina su HistoriaClinica y Evoluciones
         pacienteRepository.delete(paciente);
     }
 

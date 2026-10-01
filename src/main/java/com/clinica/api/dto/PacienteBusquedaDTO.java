@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class PacienteBusquedaDTO {
 
-    private Long idReporte; // id de la HistoriaClinica
+    private Long idReporte;
     private String nombre;
     private String apellido;
     private Integer dni;
@@ -18,7 +18,7 @@ public class PacienteBusquedaDTO {
     private String alergias;
 
     private List<String> medicamentosRecetados;
-    private List<String> estudiosRealizados; // proviene de Tratamiento
+    private List<String> estudiosRealizados;
     private List<String> medicosVisitados;
 
     public PacienteBusquedaDTO() {

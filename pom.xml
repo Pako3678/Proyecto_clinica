@@ -15,10 +15,10 @@
     <artifactId>clinica-api</artifactId>
     <version>1.0.0</version>
     <name>clinica-api</name>
-    <description>API REST headless para sistema de búsqueda de pacientes (ex Panel Médico Swing)</description>
+    <description>API REST para sistema de gestión de pacientes</description>
 
     <properties>
-        <java.version>25</java.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>
